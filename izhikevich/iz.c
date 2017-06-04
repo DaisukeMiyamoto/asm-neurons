@@ -22,7 +22,7 @@ int main()
   for (i=0; i<maxstep; i++)
     {
       double dv, du;
-      printf("%f\n", iz_v);
+      printf("%d %f\n", i, iz_v);
       dv = (iz_v_1 * iz_v * iz_v + iz_v_2 * iz_v + iz_v_3 - iz_u + iz_i) * dt;
       /*
       d[30] = iz_v * iz_v;
