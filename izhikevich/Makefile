@@ -7,7 +7,7 @@ INCLUDE = iz.h
 all: iz.out
 arm: iz_arm.out
 
-iz_arm.out: $(OBJ) calc_iz_asm1.o calc_iz_asm2.o
+iz_arm.out: $(OBJ) calc_iz_asm1.o calc_iz_asm2.o calc_iz_asm3.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 iz.out: $(OBJ)

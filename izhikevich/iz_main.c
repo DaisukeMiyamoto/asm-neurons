@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 #ifdef __aarch64__
     free(check_calc(calc_iz_asm1, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM1"));
     free(check_calc(calc_iz_asm2, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM2"));
-    //free(check_calc(calc_iz_asm3, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM3"));
+    free(check_calc(calc_iz_asm3, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM3"));
 #endif
 #endif
 
