@@ -27,17 +27,16 @@ calc_iz_asm3:
         ldr     d1, [x4, x0, lsl 3]   // d1 <- u
 
         fmul    d2, d0, d16           // d2 = v * V1
-        fmul    d3, d0, d17           // d3 = v * V2
-        fmadd   d5, d0, d2, d3        // d5 = v * (v * V1) + (v * V2)
-        fadd    d5, d5, d18           // d5 = d5 + V3
-        fsub    d5, d5, d1            // d5 = d5 - u
-        fadd    d5, d5, d15           // d5 = d5 + I
+        fmadd   d3, d0, d17, d18      // d3 = v * V2 + V3
+        fmadd   d3, d0, d2, d3        // d5 = v * (v * V1) + (v * V2)
+        fsub    d3, d3, d1            // d5 = d5 - u
+        fadd    d3, d3, d15           // d5 = d5 + I
 
         fnmsub  d4, d0, d12, d1       // d4 = v * B - u
         fmul    d4, d4, d11           // d4 = d4 * A
         fmadd   d1, d4, d10, d1       // d1 = d4 * dt + u
 
-        fmadd   d0, d5, d10, d0       // d0 = d5 * dt + v
+        fmadd   d0, d3, d10, d0       // d0 = d5 * dt + v
 
         fcmpe   d0, d19
         ble     .skip
