@@ -34,13 +34,37 @@ void print_double(int x_size, int y_size, double *array) {
     }
 }
 
-int main() {
-    const int max_step = 10;
-    const int n_cell = 2;
+
+#include <sys/time.h>
+double getTime()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return(tv.tv_sec + (double)tv.tv_usec*1e-6);
+
+}
+
+
+int main(int argc, char **argv)
+{
+    int max_step = 10000;
+    int n_cell = 10000;
+    int debug = 0;
+
+    if (argc >= 3)
+    {
+        max_step = atoi(argv[1]);
+        n_cell = atoi(argv[2]);
+    }
+    if (argc >= 4)
+    {
+        debug = 1;
+    }
     double iz_const[10];
     double *iz_v;
     double *iz_u;
-    int array_size = max_step * n_cell;
+    int array_size;
+    double start, end;
 
     iz_const[IZ_CONST_DT] = 0.1;
     iz_const[IZ_CONST_A] = 0.02;
@@ -53,14 +77,37 @@ int main() {
     iz_const[IZ_CONST_V_3] = 140.0;
     iz_const[IZ_CONST_TH] = 30.0;
 
+    array_size = max_step * n_cell;
     iz_v = (double *) malloc(array_size * sizeof(double));
     init_double(array_size, iz_v, -65.0);
     iz_u = (double *) malloc(array_size * sizeof(double));
     init_double(array_size, iz_u, -13.0);
 
+
+    printf("# %d Step, %d Cells\n", max_step, n_cell);
+
+    start = getTime();
     calc_iz_c(max_step, n_cell, iz_const, iz_v, iz_u);
+    end = getTime();
 
-    print_double(n_cell, max_step, iz_v);
-    // print_double(n_cell, max_step, iz_u);
+    if (debug == 1)
+    {
+         print_double(n_cell, max_step, iz_v);
+    }
+    printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
+           "C  ",
+           end - start,
+           1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
 
+#ifdef USE_ASM
+#ifdef __aarch64__
+    start = getTime();
+    calc_iz_asm(max_step, n_cell, iz_const, iz_v, iz_u);
+    end = getTime();
+    printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
+           "ASM",
+           end - start,
+           1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
+#endif
+#endif
 }

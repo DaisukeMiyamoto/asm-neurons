@@ -4,7 +4,7 @@ void calc_iz_c(int max_step, int n_cell, double *iz_const, double *iz_v, double 
 
     int i;
 
-    for (i = 0; i < max_step * n_cell; i++, iz_v++, iz_u++)
+    for (i = 0; i < (max_step-1) * n_cell; i++, iz_v++, iz_u++)
     {
         double dv, du;
         double tmp_v = *iz_v;
