@@ -16,40 +16,40 @@ calc_iz_asm2:
         add     x1, x4, x1
         .p2align 2
 
-.loop:
-        ldp     d6, d1, [x2, 40]      // d6 = I, d1 = V_1
-        ldr     d3, [x3, x0, lsl 3]   // d3 = v
-        ldp     d0, d7, [x2, 56]      // d0 = V_2, d7 = V_3
-        ldr     d2, [x2, 16]          // d2 = B
-        fmul    d1, d3, d1            // d1 = d3 * d1: d1 = v * V_1
-        ldr     d4, [x4, x0, lsl 3]   // d4 = u
-        ldp     d5, d16, [x2]         // d5 = DT, d16 = A
-        fmul    d0, d3, d0            // d0 = d3 * d0: d0 = v * V_2
-        fnmsub  d2, d3, d2, d4        // d2 = d3 * d2 - d4: d2 = v * B - u
-        fmadd   d0, d3, d1, d0        // d0 = d3 * d1 + d0: d0 = v * (v * V_1) + (v * V_2)
-        fmul    d1, d2, d16           // d1 = d2 * d16: d1 = A * (v * B - u)
-        fadd    d0, d0, d7            // d0 = d0 + d7
-        fmadd   d1, d5, d1, d4        // d1 = d5 * d1 + d4
-        fsub    d0, d0, d4            // d0 = d0 - d4
-        fadd    d0, d0, d6            // d0 = d0 + d6
-        fmadd   d0, d0, d5, d3        // d0 = d0 * d5 + d3
-        str     d0, [x5, x0, lsl 3]   // d0 -> next_v
-        str     d1, [x1, x0, lsl 3]   // d1 -> next_u
-        ldr     d1, [x5, x0, lsl 3]   // d1 = next_v
-        ldr     d0, [x2, 72]          // d0 = TH
+        ldp     d10, d11, [x2]        // d10 = DT, d11 = A
+        ldp     d12, d13, [x2, 16]    // d12 = B, d13 = C
+        ldp     d14, d15, [x2, 32]    // d14 = D, d15 = I
+        ldp     d16, d17, [x2, 48]    // d16 = V_1, d17 = V_2
+        ldp     d18, d19, [x2, 64]    // d18 = V_3, d19 = TH
 
-        fcmpe   d1, d0
+.loop:
+        ldr     d0, [x3, x0, lsl 3]   // d0 <- v
+        ldr     d1, [x4, x0, lsl 3]   // d1 <- u
+
+        fmul    d2, d0, d16           // d2 = v * V1
+        fmul    d3, d0, d17           // d3 = v * V2
+        fmadd   d5, d0, d2, d3        // d5 = v * (v * V1) + (v * V2)
+        fadd    d5, d5, d18           // d5 = d5 + V3
+        fsub    d5, d5, d1            // d5 = d5 - u
+        fadd    d5, d5, d15           // d5 = d5 + I
+
+        fnmsub  d4, d0, d12, d1       // d4 = v * B - u
+        fmul    d4, d4, d11           // d4 = d4 * A
+        fmadd   d1, d4, d10, d1       // d1 = d4 * dt + u
+
+        fmadd   d0, d5, d10, d0       // d0 = d5 * dt + v
+
+        fcmpe   d0, d19
         ble     .skip
 
-        ldr     x7, [x2, 24]
-        str     x7, [x5, x0, lsl 3]
-        ldr     d0, [x1, x0, lsl 3]
-        ldr     d1, [x2, 32]
-        fadd    d0, d0, d1
-        str     d0, [x1, x0, lsl 3]
+        fmov    d0, d13
+        fadd    d1, d1, d14
 
 .skip:
-        add     x0, x0, 1            // x0++
+        str     d0, [x5, x0, lsl 3]   // d0 -> next_v
+        str     d1, [x1, x0, lsl 3]   // d1 -> next_u
+
+        add     x0, x0, 1             // x0++
         cmp     w6, w0
         bgt     .loop
 .L1:
