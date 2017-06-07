@@ -89,15 +89,11 @@ int main(int argc, char **argv)
     start = getTime();
     calc_iz_c(max_step, n_cell, iz_const, iz_v, iz_u);
     end = getTime();
-
-    if (debug == 1)
-    {
-         print_double(n_cell, max_step, iz_v);
-    }
     printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
            "C  ",
            end - start,
            1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
+    if (debug == 1) print_double(n_cell, max_step, iz_v);
 
 #ifdef USE_ASM
 #ifdef __aarch64__
@@ -108,6 +104,8 @@ int main(int argc, char **argv)
            "ASM",
            end - start,
            1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
+    if (debug == 1) print_double(n_cell, max_step, iz_v);
 #endif
 #endif
+
 }

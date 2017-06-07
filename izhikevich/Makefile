@@ -16,8 +16,8 @@ iz.out: $(OBJ)
 asm: calc_iz_c.c
 	$(CC) $(CFLAGS) -S $^
 
-test:
-	./iz.out
+test_arm: iz_arm.out
+	./iz_arm.out 10 1 1
 
 plot:
 	./iz.out 1000 1 > result.txt
