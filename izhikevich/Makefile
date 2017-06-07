@@ -1,14 +1,16 @@
 #makefile
 
 CFLAGS := -Wall -O2
+OBJ = iz_main.o calc_iz_c.o
+INCLUDE = iz.h
 
-all: iz_c.out iz_asm.out
+all: iz.out
 
-iz_c.out: iz.c
+iz.out: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
-iz_asm.out: iz_asm.s
-	$(CC) -o $@ $^
+asm: calc_iz_c.c
+	$(CC) $(CFLAGS) -S $^
 
 test:
 	./iz_c.out > result_c.txt
