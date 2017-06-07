@@ -15,7 +15,9 @@
 #define IZ_FLOP_PER_STEP 14
 
 void calc_iz_c(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
-void calc_iz_asm(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
+void calc_iz_asm1(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
+void calc_iz_asm2(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
+void calc_iz_asm3(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
 
 
 #endif //ASM_NEURONS_IZ_H

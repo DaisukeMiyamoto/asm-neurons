@@ -44,6 +44,39 @@ double getTime()
 
 }
 
+double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u),
+                   int max_step, int n_cell, double *iz_const,
+                   double *answer, int debug, char *title)
+{
+    double start, end;
+    double *iz_v;
+    double *iz_u;
+    int array_size;
+
+    array_size = max_step * n_cell;
+    iz_v = (double *) malloc(array_size * sizeof(double));
+    init_double(array_size, iz_v, -65.0);
+    iz_u = (double *) malloc(array_size * sizeof(double));
+    init_double(array_size, iz_u, -13.0);
+
+    start = getTime();
+    func(max_step, n_cell, iz_const, iz_v, iz_u);
+    end = getTime();
+
+    printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
+           title,
+           end - start,
+           1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
+
+    if (debug == 1)
+    {
+        print_double(n_cell, max_step, iz_v);
+        if (answer != NULL) printf("diff = %f\n", diff_double(array_size, answer, iz_v));
+    }
+
+    free(iz_u);
+    return(iz_v);
+}
 
 int main(int argc, char **argv)
 {
@@ -61,10 +94,7 @@ int main(int argc, char **argv)
         debug = 1;
     }
     double iz_const[10];
-    double *iz_v;
-    double *iz_u;
-    int array_size;
-    double start, end;
+    double *answer_iz_v;
 
     iz_const[IZ_CONST_DT] = 0.1;
     iz_const[IZ_CONST_A] = 0.02;
@@ -77,34 +107,15 @@ int main(int argc, char **argv)
     iz_const[IZ_CONST_V_3] = 140.0;
     iz_const[IZ_CONST_TH] = 30.0;
 
-    array_size = max_step * n_cell;
-    iz_v = (double *) malloc(array_size * sizeof(double));
-    init_double(array_size, iz_v, -65.0);
-    iz_u = (double *) malloc(array_size * sizeof(double));
-    init_double(array_size, iz_u, -13.0);
-
-
     printf("# %d Step, %d Cells\n", max_step, n_cell);
 
-    start = getTime();
-    calc_iz_c(max_step, n_cell, iz_const, iz_v, iz_u);
-    end = getTime();
-    printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
-           "C  ",
-           end - start,
-           1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
-    if (debug == 1) print_double(n_cell, max_step, iz_v);
+    answer_iz_v = check_calc(calc_iz_c, max_step, n_cell, iz_const, NULL, debug, "C   ");
 
 #ifdef USE_ASM
 #ifdef __aarch64__
-    start = getTime();
-    calc_iz_asm(max_step, n_cell, iz_const, iz_v, iz_u);
-    end = getTime();
-    printf("# %s: Time=%.2f sec (%.1f MFLOPS)\n",
-           "ASM",
-           end - start,
-           1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
-    if (debug == 1) print_double(n_cell, max_step, iz_v);
+    free(check_calc(calc_iz_asm1, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM1"));
+    free(check_calc(calc_iz_asm2, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM2"));
+    //free(check_calc(calc_iz_asm3, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM3"));
 #endif
 #endif
 
