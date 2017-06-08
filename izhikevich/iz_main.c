@@ -51,6 +51,8 @@ double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, doub
     double start, end;
     double *iz_v;
     double *iz_u;
+    double *tmp_iz_v;
+    double *tmp_iz_u;
     int array_size;
 
     array_size = max_step * n_cell;
@@ -58,6 +60,8 @@ double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, doub
     init_double(array_size, iz_v, -65.0);
     iz_u = (double *) malloc(array_size * sizeof(double));
     init_double(array_size, iz_u, -13.0);
+    tmp_iz_v = iz_v;
+    tmp_iz_u = iz_u;
 
     start = getTime();
     func(max_step, n_cell, iz_const, iz_v, iz_u);
@@ -68,14 +72,14 @@ double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, doub
            end - start,
            1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
 
-    if (debug == 1)
+    if (debug >= 1)
     {
         print_double(n_cell, max_step, iz_v);
-        if (answer != NULL) printf("diff = %f\n", diff_double(array_size, answer, iz_v));
     }
+    if (answer != NULL) printf("diff = %f\n", diff_double(array_size, answer, tmp_iz_v));
 
-    free(iz_u);
-    return(iz_v);
+    free(tmp_iz_u);
+    return(tmp_iz_v);
 }
 
 int main(int argc, char **argv)
@@ -89,10 +93,9 @@ int main(int argc, char **argv)
         max_step = atoi(argv[1]);
         n_cell = atoi(argv[2]);
     }
-    if (argc >= 4)
-    {
-        debug = 1;
-    }
+    if (argc >= 4) debug = 1;
+    if (argc >= 5) debug = 2;
+
     double iz_const[10];
     double *answer_iz_v;
 
@@ -118,5 +121,7 @@ int main(int argc, char **argv)
     free(check_calc(calc_iz_asm3, max_step, n_cell, iz_const, answer_iz_v, debug, "ASM3"));
 #endif
 #endif
+
+    free(answer_iz_v);
 
 }

@@ -16,41 +16,52 @@ calc_iz_asm3:
         add     x1, x4, x1
         .p2align 2
 
-        ldp     d10, d11, [x2]        // d10 = DT, d11 = A
-        ldp     d12, d13, [x2, 16]    // d12 = B, d13 = C
-        ldp     d14, d15, [x2, 32]    // d14 = D, d15 = I
-        ldp     d16, d17, [x2, 48]    // d16 = V_1, d17 = V_2
-        ldp     d18, d19, [x2, 64]    // d18 = V_3, d19 = TH
-
+        ld1r    {v10.2d}, [x2], 8           // DT
+        ld1r    {v11.2d}, [x2], 8           // A
+        ld1r    {v12.2d}, [x2], 8           // B
+        ld1r    {v13.2d}, [x2], 8           // C
+        ld1r    {v14.2d}, [x2], 8           // D
+        ld1r    {v15.2d}, [x2], 8           // I
+        ld1r    {v16.2d}, [x2], 8           // V_1
+        ld1r    {v17.2d}, [x2], 8           // V_2
+        ld1r    {v18.2d}, [x2], 8           // V_3
+        ld1r    {v19.2d}, [x2], 8           // TH
 .loop:
-        ldr     d0, [x3, x0, lsl 3]   // d0 <- v
-        ldr     d1, [x4, x0, lsl 3]   // d1 <- u
+        ld1     {v0.2d}, [x3], 16
+        ld1     {v1.2d}, [x4], 16
 
-        fmul    d2, d0, d16           // d2 = v * V1
-        fmadd   d3, d0, d17, d18      // d3 = v * V2 + V3
-        fmadd   d3, d0, d2, d3        // d5 = v * (v * V1) + (v * V2)
-        fsub    d3, d3, d1            // d5 = d5 - u
-        fadd    d3, d3, d15           // d5 = d5 + I
+        fmul    v2.2d, v0.2d, v16.2d           // d2 = v * V1
+        //fmadd    v3.2d, v0.2d, v17.2d, v18.2d      // d3 = v * V2 + V3
+        fmul    v3.2d, v0.2d, v17.2d
+        fadd    v3.2d, v3.2d, v18.2d
+        fmla    v3.2d, v0.2d, v2.2d        // d5 = v * (v * V1) + (v * V2)
+        fsub    v3.2d, v3.2d, v1.2d            // d5 = d5 - u
+        fadd    v3.2d, v3.2d, v15.2d           // d5 = d5 + I
 
-        fnmsub  d4, d0, d12, d1       // d4 = v * B - u
-        fmul    d4, d4, d11           // d4 = d4 * A
-        fmadd   d1, d4, d10, d1       // d1 = d4 * dt + u
+        //fnmsub  v4.2d, v0.2d, v12.2d, v1.2d       // d4 = v * B - u
+        fmul    v4.2d, v0.2d, v12.2d
+        fsub    v4.2d, v4.2d, v1.2d
+        fmul    v4.2d, v4.2d, v11.2d           // d4 = d4 * A
+        fmla    v1.2d, v4.2d, v10.2d                // d1 = d4 * dt + u
 
-        fmadd   d0, d3, d10, d0       // d0 = d5 * dt + v
+        fmla    v0.2d, v3.2d, v10.2d                // d0 = d5 * dt + v
 
+
+        // BUG: compare with vector
         fcmpe   d0, d19
-        ble     .skip
+        ble     .skip1
 
         fmov    d0, d13
         fadd    d1, d1, d14
+.skip1:
 
-.skip:
-        str     d0, [x5, x0, lsl 3]   // d0 -> next_v
-        str     d1, [x1, x0, lsl 3]   // d1 -> next_u
+        st1     {v0.2d}, [x5], 16
+        st1     {v1.2d}, [x1], 16
 
-        add     x0, x0, 1             // x0++
+        add     x0, x0, 2             // x0++
         cmp     w6, w0
         bgt     .loop
+
 .L1:
         ret
         .size   calc_iz_asm3, .-calc_iz_asm3
