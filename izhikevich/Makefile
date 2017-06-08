@@ -1,23 +1,27 @@
 #makefile
 
-CFLAGS := -Wall -O2
+CFLAGS := -Wall -O3 -DUSE_ASM
+OBJ = iz_main.o calc_iz_c.o
+INCLUDE = iz.h
 
-all: iz_c.out iz_asm.out
+all: iz.out
+arm: iz_arm.out
 
-iz_c.out: iz.c
+iz_arm.out: $(OBJ) calc_iz_asm1.o calc_iz_asm2.o calc_iz_asm3.o
 	$(CC) $(CFLAGS) -o $@ $^
 
-iz_asm.out: iz_asm.s
-	$(CC) -o $@ $^
+iz.out: $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-test:
-	./iz_c.out > result_c.txt
-	./iz_asm.out > result_asm.txt
+asm: calc_iz_c.c
+	$(CC) $(CFLAGS) -S $^
 
-result_c.txt: test
-result_asm.txt: test
-plot: result_c.txt result_asm.txt
-	python ../utils/plot.py result_c.txt iz_c
+test_arm: iz_arm.out
+	./iz_arm.out 10 2 1
+
+plot:
+	./iz.out 1000 1 > result.txt
+	python ../utils/plot.py result.txt
 
 clean:
 	rm -rf *.out *.o

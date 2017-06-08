@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0db026b1-2021-400b-958f-3eef6fa1c146" name="tegra01" url="http://tegra01">
+        <fileTransfer host="tegra01" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/nebula" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
