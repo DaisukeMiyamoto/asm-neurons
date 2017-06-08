@@ -30,18 +30,18 @@ calc_iz_asm3:
         ld1     {v0.2d}, [x3], 16
         ld1     {v1.2d}, [x4], 16
 
-        fmul    v2.2d, v0.2d, v16.2d           // d2 = v * V1
-        //fmadd    v3.2d, v0.2d, v17.2d, v18.2d      // d3 = v * V2 + V3
-        fmul    v3.2d, v0.2d, v17.2d
-        fadd    v3.2d, v3.2d, v18.2d
-        fmla    v3.2d, v0.2d, v2.2d        // d5 = v * (v * V1) + (v * V2)
-        fsub    v3.2d, v3.2d, v1.2d            // d5 = d5 - u
-        fadd    v3.2d, v3.2d, v15.2d           // d5 = d5 + I
+        fmul    v2.2d, v0.2d, v16.2d                // d2 = v * V1
+        //fmadd    v3.2d, v0.2d, v17.2d, v18.2d     // d3 = v * V2 + V3
+        fmul    v3.2d, v0.2d, v17.2d                // d3 = v * v_2
+        fadd    v3.2d, v3.2d, v18.2d                // d3 = d3 + V_3
+        fmla    v3.2d, v0.2d, v2.2d                 // d5 = v * (v * V1) + (v * V2)
+        fsub    v3.2d, v3.2d, v1.2d                 // d5 = d5 - u
+        fadd    v3.2d, v3.2d, v15.2d                // d5 = d5 + I
 
         //fnmsub  v4.2d, v0.2d, v12.2d, v1.2d       // d4 = v * B - u
         fmul    v4.2d, v0.2d, v12.2d
         fsub    v4.2d, v4.2d, v1.2d
-        fmul    v4.2d, v4.2d, v11.2d           // d4 = d4 * A
+        fmul    v4.2d, v4.2d, v11.2d                // d4 = d4 * A
         fmla    v1.2d, v4.2d, v10.2d                // d1 = d4 * dt + u
 
         fmla    v0.2d, v3.2d, v10.2d                // d0 = d5 * dt + v
