@@ -47,13 +47,23 @@ calc_iz_asm3:
         fmla    v0.2d, v3.2d, v10.2d                // d0 = d5 * dt + v
 
 
-        // BUG: compare with vector
         fcmpe   d0, d19
         ble     .skip1
 
-        fmov    d0, d13
-        fadd    d1, d1, d14
+        ins     v0.2d[0], v13.2d[0]
+        fadd    d2, d1, d14
+        ins     v1.2d[0], v2.2d[0]
 .skip1:
+
+        ins     v2.2d[0], v0.2d[1]
+        fcmpe   d2, d19
+        ble     .skip2
+
+        ins     v0.2d[1], v13.2d[0]
+        ins     v2.2d[0], v1.2d[1]
+        fadd    d2, d2, d14
+        ins     v1.2d[1], v2.2d[0]
+.skip2:
 
         st1     {v0.2d}, [x5], 16
         st1     {v1.2d}, [x1], 16
