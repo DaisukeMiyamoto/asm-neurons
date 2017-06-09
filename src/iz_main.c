@@ -33,11 +33,16 @@ double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, doub
            end - start,
            1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
 
-    if (debug >= 1)
-    {
-        print_double(n_cell, max_step, iz_v);
+    if (debug >= 2) print_double(n_cell, max_step, iz_v);
+    if (answer != NULL) {
+        double diff = diff_double(array_size, answer, tmp_iz_v);
+        printf("diff = %f\n", diff);
+        if (debug >= 1 && diff > IZ_FAILED_THRESHOLD)
+        {
+            printf("TEST FAILED\n");
+            exit(-1);
+        }
     }
-    if (answer != NULL) printf("diff = %f\n", diff_double(array_size, answer, tmp_iz_v));
 
     free(tmp_iz_u);
     return(tmp_iz_v);
