@@ -1,7 +1,7 @@
 #makefile
 
 CFLAGS := -Wall -O3 -DUSE_ASM
-OBJ = iz_main.o calc_iz_c.o
+OBJ = iz_main.o calc_iz_c.o benchmark_utils.o
 INCLUDE = iz.h
 
 all: iz.out
