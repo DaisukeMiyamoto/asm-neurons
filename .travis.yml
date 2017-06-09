@@ -1,0 +1,7 @@
+language: c
+script:
+  - ${CC} --version
+  - cd src && make test
+
+notifications:
+  slack: microbrain:dHXYnMz4KBlHXHLs64ju5h5Y
