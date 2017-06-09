@@ -1,4 +1,8 @@
-# asm-neurons
+asm-neurons
+---
+
+[![Build Status](https://travis-ci.org/DaisukeMiyamoto/asm-neurons.svg?branch=master)](https://travis-ci.org/DaisukeMiyamoto/asm-neurons)
+
 Assembler implementation of several computational neuron models
 
 # Izhikevich model
