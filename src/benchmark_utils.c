@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/time.h>
 
 #include "benchmark_utils.h"
 
@@ -40,7 +41,6 @@ void print_double(int x_size, int y_size, double *array) {
 }
 
 
-#include <sys/time.h>
 double getTime()
 {
     struct timeval tv;

@@ -3,6 +3,7 @@
 CFLAGS := -Wall -O3 -DUSE_ASM
 OBJ = iz_main.o calc_iz_c.o benchmark_utils.o
 INCLUDE = iz.h
+TEST_TARGET = iz.out
 
 all: iz.out
 arm: iz_arm.out
@@ -15,6 +16,9 @@ iz.out: $(OBJ)
 
 asm: calc_iz_c.c
 	$(CC) $(CFLAGS) -S $^
+
+test: iz.out
+	./iz.out 1000 1000
 
 test_arm: iz_arm.out
 	./iz_arm.out 10 2 1
