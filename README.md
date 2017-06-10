@@ -8,15 +8,21 @@ Assembler implementation of several computational neuron models
 # Izhikevich model
 
 ## usage
+- x86
+```
+$ cd src
+$ make
+$ ./iz.out 
+```
 
 - ARMv8 (aarch64)
 ```
-$ cd izhikevich
+$ cd src
 $ make arm
 $ ./iz_arm.out 
 ```
 
-## describe
+## assembler file conditions
 - `calc_iz_asm1.s`: same as `gcc -S` output code from `calc_iz_c.c`
 - `calc_iz_asm2.s`: reduce load/store
 - `calc_iz_asm3.s`: use SIMD instruction
@@ -34,7 +40,35 @@ $ ./iz_arm.out
     diff = 0.000008
     ```
 - Raspberry Pi3
-
+    ```
+    $ ./iz_arm.out 5000 5000
+    # 5000 Step, 5000 Cells
+    # C   : Time=2.15 sec (162.6 MFLOPS)
+    # ASM1: Time=2.14 sec (163.6 MFLOPS)
+    diff = 0.000000
+    # ASM2: Time=2.12 sec (165.5 MFLOPS)
+    diff = 0.000000
+    # ASM3: Time=1.67 sec (209.4 MFLOPS)
+    ```
 
 # Hodgkin-Huxley model
 
+## usage
+- x86
+```
+$ cd src
+$ make
+$ ./hh.out 
+```
+
+- ARMv8 (aarch64)
+```
+$ cd src
+$ make arm
+$ ./hh_arm.out 
+```
+
+## assembler file conditions
+
+## benchmark results
+- Jetson TX1 (Tegra, NVIDIA)
