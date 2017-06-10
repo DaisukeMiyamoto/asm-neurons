@@ -42,6 +42,16 @@ double *check_calc(void (*func)(int max_step, int n_cell, const double *const_ta
     return(tmp_data_array);
 }
 
+#define HH_CONST_DT 0
+#define HH_CONST_CM_INV 1
+#define HH_CONST_GK 2
+#define HH_CONST_E_K 3
+#define HH_CONST_GNA 4
+#define HH_CONST_E_NA 5
+#define HH_CONST_GM 6
+#define HH_CONST_REST 7
+
+
 int main(int argc, char **argv)
 {
     int max_step = 10000;
@@ -54,6 +64,16 @@ int main(int argc, char **argv)
 
     double const_table[10];
     double *answer_array;
+
+    const_table[HH_CONST_DT] = 0.025;
+    const_table[HH_CONST_CM_INV] = 1.0;
+    const_table[HH_CONST_GK] = 36.0;
+    const_table[HH_CONST_E_K] = -77.0;
+    const_table[HH_CONST_GNA] = 120.0;
+    const_table[HH_CONST_E_NA] = 50.0;
+    const_table[HH_CONST_GM] = 0.3;
+    const_table[HH_CONST_REST] = -54.3;
+
 
     printf("# %d Step, %d Cells\n", max_step, n_cell);
 

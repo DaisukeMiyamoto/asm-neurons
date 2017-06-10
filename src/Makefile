@@ -15,7 +15,7 @@ iz.out: $(IZ_OBJ) iz.h
 	$(CC) $(CFLAGS) -o $@ $^
 
 hh.out: $(HH_OBJ) hh.h
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 asm: calc_iz_c.c
 	$(CC) $(CFLAGS) -S $^
