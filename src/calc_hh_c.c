@@ -1,6 +1,8 @@
 //
 // Created by nebula on 6/10/17.
 //
+#include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include "hh.h"
 

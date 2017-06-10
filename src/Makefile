@@ -17,7 +17,12 @@ iz.out: $(IZ_OBJ) iz.h
 hh.out: $(HH_OBJ) hh.h
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-asm: calc_iz_c.c
+gen_asm: calc_iz_c.s calc_hh_c.s
+
+calc_iz_c.s: calc_iz_c.c
+	$(CC) $(CFLAGS) -S $^
+
+calc_hh_c.s: calc_hh_c.c
 	$(CC) $(CFLAGS) -S $^
 
 test: iz.out hh.out

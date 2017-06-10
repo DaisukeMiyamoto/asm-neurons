@@ -42,15 +42,6 @@ double *check_calc(void (*func)(int max_step, int n_cell, const double *const_ta
     return(tmp_data_array);
 }
 
-#define HH_CONST_DT 0
-#define HH_CONST_CM_INV 1
-#define HH_CONST_GK 2
-#define HH_CONST_E_K 3
-#define HH_CONST_GNA 4
-#define HH_CONST_E_NA 5
-#define HH_CONST_GM 6
-#define HH_CONST_REST 7
-
 
 int main(int argc, char **argv)
 {
