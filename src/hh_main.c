@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     const_table[HH_CONST_E_NA] = 50.0;
     const_table[HH_CONST_GM] = 0.3;
     const_table[HH_CONST_REST] = -54.3;
+    const_table[HH_CONST_I_INJ] = 5;
 
 
     printf("# %d Step, %d Cells\n", max_step, n_cell);

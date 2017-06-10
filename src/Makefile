@@ -6,9 +6,12 @@ HH_OBJ = hh_main.o calc_hh_c.o benchmark_utils.o
 TEST_TARGET = iz.out
 
 all: iz.out hh.out
-arm: iz_arm.out
+arm: iz_arm.out hh_arm.out
 
 iz_arm.out: $(IZ_OBJ) calc_iz_asm1.o calc_iz_asm2.o calc_iz_asm3.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+hh_arm.out: $(HH_OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
 iz.out: $(IZ_OBJ) iz.h
@@ -37,4 +40,4 @@ plot:
 	python ../utils/plot.py result.txt
 
 clean:
-	rm -rf *.out *.o
+	rm -rf *.out *.o calc_iz_c.s calc_hh_c.s

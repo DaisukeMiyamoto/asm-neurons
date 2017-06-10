@@ -13,6 +13,7 @@
 #define HH_CONST_E_NA 5
 #define HH_CONST_GM 6
 #define HH_CONST_REST 7
+#define HH_CONST_I_INJ 8
 
 #define HH_FLOP_PER_STEP 200
 #define HH_FAILED_THRESHOLD 1.0
