@@ -2,47 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "benchmark_utils.h"
 #include "iz.h"
-
-double diff_double(int size, double *array1, double *array2) {
-    int i;
-    double diff = 0.0;
-    for (i = 0; i < size; i++) {
-        diff += fabs(*array1 - *array2);
-        array1++;
-        array2++;
-    }
-    return diff;
-}
-
-void init_double(int size, double *array1, double value) {
-    int i;
-    for (i = 0; i < size; i++) {
-        *array1 = value;
-        array1++;
-    }
-}
-
-void print_double(int x_size, int y_size, double *array) {
-    int i, j;
-    for (i = 0; i < y_size; i++) {
-        for (j = 0; j < x_size; j++) {
-            printf(" %9.5f", *array);
-            array++;
-        }
-        printf("\n");
-    }
-}
-
-
-#include <sys/time.h>
-double getTime()
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return(tv.tv_sec + (double)tv.tv_usec*1e-6);
-
-}
 
 double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u),
                    int max_step, int n_cell, double *iz_const,
@@ -72,11 +33,16 @@ double *check_calc(void (*func)(int max_step, int n_cell, double *iz_const, doub
            end - start,
            1.0 * max_step * n_cell * IZ_FLOP_PER_STEP / (end - start + 0.00001) / 1000 / 1000);
 
-    if (debug >= 1)
-    {
-        print_double(n_cell, max_step, iz_v);
+    if (debug >= 2) print_double(n_cell, max_step, iz_v);
+    if (answer != NULL) {
+        double diff = diff_double(array_size, answer, tmp_iz_v);
+        printf("diff = %f\n", diff);
+        if (debug >= 1 && diff > IZ_FAILED_THRESHOLD)
+        {
+            printf("TEST FAILED\n");
+            exit(-1);
+        }
     }
-    if (answer != NULL) printf("diff = %f\n", diff_double(array_size, answer, tmp_iz_v));
 
     free(tmp_iz_u);
     return(tmp_iz_v);

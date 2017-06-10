@@ -13,6 +13,7 @@
 #define IZ_CONST_TH 9
 
 #define IZ_FLOP_PER_STEP 14
+#define IZ_FAILED_THRESHOLD 1.0
 
 void calc_iz_c(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
 void calc_iz_asm1(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u);
