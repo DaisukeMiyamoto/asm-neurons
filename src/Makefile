@@ -20,7 +20,7 @@ hh.out: $(HH_OBJ) hh.h
 asm: calc_iz_c.c
 	$(CC) $(CFLAGS) -S $^
 
-test: iz.out
+test: iz.out hh.out
 	./iz.out 1000 1000
 	./hh.out 1000 1000
 
