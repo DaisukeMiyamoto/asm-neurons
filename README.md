@@ -69,6 +69,8 @@ $ ./hh_arm.out
 ```
 
 ## assembler file conditions
+- `calc_hh_asm1.s`: same as `gcc -S` output code from `calc_hh_c.c`
+
 
 ## benchmark results
 - Jetson TX1 (Tegra, NVIDIA)
