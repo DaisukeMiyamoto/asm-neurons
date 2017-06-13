@@ -54,13 +54,9 @@ int main(int argc, char **argv)
     int n_cell = 10000;
     int debug = 0;
 
-    if (argc >= 3)
-    {
-        max_step = atoi(argv[1]);
-        n_cell = atoi(argv[2]);
-    }
-    if (argc >= 4) debug = 1;
-    if (argc >= 5) debug = 2;
+    if (argc >= 2) max_step = atoi(argv[1]);
+    if (argc >= 3) n_cell = atoi(argv[2]);
+    if (argc >= 4) debug = atoi(argv[3]);
 
     double iz_const[10];
     double *answer_iz_v;

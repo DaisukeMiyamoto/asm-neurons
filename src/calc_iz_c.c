@@ -1,6 +1,7 @@
 #include "iz.h"
 
-void calc_iz_c(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u) {
+void calc_iz_c(int max_step, int n_cell, double *iz_const, double *iz_v, double *iz_u)
+{
 
     int i;
 
