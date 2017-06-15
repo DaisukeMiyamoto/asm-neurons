@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="63ca201d-59d1-4753-b54f-873f853dc0b7" name="kobo" url="http://192.168.11.7">
+        <fileTransfer host="192.168.11.7" port="22" rootFolder="/home/kobo" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
