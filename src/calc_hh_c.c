@@ -47,7 +47,7 @@ FLOAT calc_dn_core(FLOAT v, FLOAT n, FLOAT dt) { return( (calc_alpha_n(v) * (1.0
 FLOAT calc_dh_core(FLOAT v, FLOAT h, FLOAT dt) { return( (calc_alpha_h(v) * (1.0 - h) - calc_beta_h(v) * (h)) * dt ); }
 
 //
-FLOAT calc_dv_core(FLOAT v, FLOAT m, FLOAT n, FLOAT h, FLOAT *const_table)
+FLOAT calc_dv_core(FLOAT v, FLOAT m, FLOAT n, FLOAT h, const FLOAT *const_table)
 {
     FLOAT dv;
     dv = const_table[HH_CONST_DT] * const_table[HH_CONST_CM_INV]
@@ -61,7 +61,7 @@ FLOAT calc_dv_core(FLOAT v, FLOAT m, FLOAT n, FLOAT h, FLOAT *const_table)
 double calc_hh_c_core(double *hh_v, double *hh_m, double *hh_n, double *hh_h, const double *const_table)
 {
     // 1 step: 74 + 72 + 74 + 19 + 4 = 243
-    double dm, dn, dh, m, h, n, v;
+    double m, h, n, v;
     m = *hh_m;
     h = *hh_h;
     n = *hh_n;

@@ -12,7 +12,7 @@ iz_arm.out: $(IZ_OBJ) calc_iz_asm1.o calc_iz_asm2.o calc_iz_asm3.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 hh_arm.out: $(HH_OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 iz.out: $(IZ_OBJ) iz.h
 	$(CC) $(CFLAGS) -o $@ $^
