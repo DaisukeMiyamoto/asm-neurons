@@ -74,3 +74,7 @@ $ ./hh_arm.out
 
 ## benchmark results
 - Jetson TX1 (Tegra, NVIDIA)
+    ```
+    # 10000 Step, 10000 Cells
+    # C   : Time=16.42 sec (1218.0 MFLOPS)
+    ```
