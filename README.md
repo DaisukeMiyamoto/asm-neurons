@@ -11,9 +11,18 @@ Assembler implementation of several computational neuron models
 
 - ARMv8 (aarch64)
 ```
-$ cd izhikevich
+$ cd src
 $ make arm
-$ ./iz_arm.out 
+$ ./iz.out 
+$ ./hh.out
+```
+
+- x86_64
+```
+$ cd src
+$ make
+$ ./iz.out
+$ ./hh.out
 ```
 
 ## describe
